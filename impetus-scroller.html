@@ -1,4 +1,6 @@
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../polymer/lib/legacy/class.html">
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
 
 <script src="impetus.min.js"></script>
@@ -38,19 +40,21 @@ Momentum scroller using impetus
         will-change: transform;
       }
     </style>
-    <div id="container"><content id="content"></content></div>
+    <div id="container"><slot id="content"></slot></div>
   </template>
 
   <script>
-    Polymer({
+    class ImpetusScroller extends Polymer.mixinBehaviors([Polymer.IronResizableBehavior], Polymer.Element) {
 
-      is: 'impetus-scroller',
+      constructor() {
+        super();
+        this._ironResizeListener = this._onIronResize.bind(this);
+        this._domChangeListener = this._childNodesChanged.bind(this);
+      }
 
-      behaviors: [
-        Polymer.IronResizableBehavior
-      ],
+      static get is() { return 'impetus-scroller'; }
 
-      properties: {
+      static get properties() { return {
         /** spacing (in px) between elements */
         spacing: {
           type: Number,
@@ -104,27 +108,22 @@ Momentum scroller using impetus
           type: Array,
           computed: '_computeLayout(_dimensions, _height, spacing)'
         }
-      },
+      }}
 
-      observers: [
-        '_layoutChanged(_layout)',
-        '_widthChanged(_width, _totalWidth)'
-      ],
+      static get observers() { return [
+            '_layoutChanged(_layout)',
+            '_widthChanged(_width, _totalWidth)'
+          ];
+      }
 
-      listeners: {
-        'iron-resize': '_onIronResize',
-        'dom-change': '_childNodesChanged'
-      },
-
-      selectIndex: function(index) {
+      selectIndex(index) {
         if (index < this._dimensions.length) {
           this.selectedIndex = index;
         }
-      },
+      }
 
-      _selectedIndexChanged: function(val) {
+      _selectedIndexChanged(val) {
         if (this.loading) return;
-
         var x = this._positionForIndex();
         this._positionChanged(x, 0);
 
@@ -136,32 +135,39 @@ Momentum scroller using impetus
           el.style.transition = '';
           el.removeEventListener("transitionend", this);
         }, false);
-      },
+      }
 
-      attached: function() {
+      connectedCallback() {
+        super.connectedCallback();
         var boundHandler = this._childNodesChanged.bind(this);
         this._observer = Polymer.dom(this.$.content).observeNodes(boundHandler);
-        this.async(this.notifyResize, 1);
-      },
+        this._observer = new Polymer.FlattenedNodesObserver(this.$.content, boundHandler);
+        this.addEventListener('iron-resize', this._ironResizeListener);
+        this.addEventListener('dom-change', this._domChangeListener);
+        Polymer.Async.microTask.run(() => this.notifyResize());
+      }
 
-      detached: function() {
-        Polymer.dom(this.$.content).unobserveNodes(this._observer);
-      },
+      disconnectedCallback() {
+        super.disconnectedCallback();
+        this._observer.disconnect();
+        this.removeEventListener('iron-resize', this._ironResizeListener);
+        this.removeEventListener('dom-change', this._domChangeListener);
+      }
 
-      _childNodesChanged: function(e) {
+      _childNodesChanged(e) {
         this._height = this.clientHeight;
-        var nodes = this.getEffectiveChildren();
+        var nodes = Polymer.FlattenedNodesObserver.getFlattenedNodes(this).filter(n => n.nodeType === Node.ELEMENT_NODE);
         this._elements = nodes.filter(function(node) { return node.nodeType == Node.ELEMENT_NODE && node.tagName !== "TEMPLATE" });
-      },
+      }
 
       get parent() {
         if (this.parentNode.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
           return this.parentNode.host;
         }
         return this.parentNode;
-      },
+      }
 
-      _onIronResize: function() {
+      _onIronResize() {
         if (this._width) {
           // throttle layout calculations after first one
           this.debounce('resize', function(){
@@ -170,21 +176,24 @@ Momentum scroller using impetus
         } else {
           this._width = this.clientWidth;
         }
-      },
+      }
 
       // get the dimensions from the elements
       _computeDimensions(elements) {
         return elements.map(function(node) { return { width: node.clientWidth, height: node.clientHeight, aspect: node.clientWidth / node.clientHeight }});
-      },
+      }
 
       _computeLayout(dimensions, height, spacing) {
+        if (!dimensions) {
+            return;
+        }
         var left = 0;
         return dimensions.map(function(dim) {
           var result = { left: left, width: Math.round(height * dim.aspect), height: height }
           left += result.width + spacing;
           return result;
         });
-      },
+      }
 
       _widthChanged(width, totalWidth) {
         if (this._impetus) {
@@ -213,9 +222,12 @@ Momentum scroller using impetus
         } else {
           this.x = 0;
         }
-      },
+      }
 
       _layoutChanged(layout) {
+        if (!layout || (layout.length === 0)) {
+            return;
+        }
         requestAnimationFrame(function() {
           layout.forEach(function(position, i) {
             var scaleX, scaleY, style;
@@ -241,15 +253,15 @@ Momentum scroller using impetus
 
             // remove loading style override which prevented
             // animation of the initial layout
-            this.async(function() { this.loading = false }, 1);
+            Polymer.Async.microTask.run(() => {this.loading = false;});
           }
 
           this.fire('rendered');
 
         }.bind(this));
-      },
+      }
 
-      _positionForIndex: function() {
+      _positionForIndex() {
         if (this.selectedIndex >= this._layout.length) {
           this.selectedIndex = this._layout.length - 1;
         }
@@ -258,14 +270,16 @@ Momentum scroller using impetus
         if (x < 0) x = 0;
         if (x > (this._totalWidth - this._width)) x = this._totalWidth - this._width;
         return -x;
-      },
+      }
 
-      _positionChanged: function(x, y) {
+      _positionChanged(x, y) {
         if (this.x != x) {
           this.x = x;
           this.$.container.style.transform = 'translateX(' + x + 'px)';
         }
       }
-    });
+    }
+
+    customElements.define(ImpetusScroller.is, ImpetusScroller);
   </script>
 </dom-module>

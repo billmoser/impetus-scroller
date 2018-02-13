@@ -1,0 +1,597 @@
+{
+  "schema_version": "1.0.0",
+  "elements": [
+    {
+      "description": "`impetus-scroller`\nMomentum scroller using impetus",
+      "summary": "",
+      "path": "impetus-scroller.html",
+      "properties": [
+        {
+          "name": "spacing",
+          "type": "number",
+          "description": "spacing (in px) between elements",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 58,
+              "column": 8
+            },
+            "end": {
+              "line": 61,
+              "column": 9
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "1"
+        },
+        {
+          "name": "friction",
+          "type": "number",
+          "description": "impetus friction",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 64,
+              "column": 8
+            },
+            "end": {
+              "line": 67,
+              "column": 9
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "0.96"
+        },
+        {
+          "name": "loading",
+          "type": "boolean",
+          "description": "loading flag for initial render",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 70,
+              "column": 8
+            },
+            "end": {
+              "line": 75,
+              "column": 9
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true
+            }
+          },
+          "defaultValue": "true"
+        },
+        {
+          "name": "x",
+          "type": "number",
+          "description": "current position",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 78,
+              "column": 8
+            },
+            "end": {
+              "line": 81,
+              "column": 9
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "0"
+        },
+        {
+          "name": "selectedIndex",
+          "type": "number",
+          "description": "Index of selected item",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 84,
+              "column": 8
+            },
+            "end": {
+              "line": 87,
+              "column": 9
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "observer": "\"_selectedIndexChanged\""
+            }
+          }
+        },
+        {
+          "name": "_width",
+          "type": "number",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 89,
+              "column": 8
+            },
+            "end": {
+              "line": 91,
+              "column": 9
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "_height",
+          "type": "number",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 93,
+              "column": 8
+            },
+            "end": {
+              "line": 95,
+              "column": 9
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "_elements",
+          "type": "Array",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 97,
+              "column": 8
+            },
+            "end": {
+              "line": 99,
+              "column": 9
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "_dimensions",
+          "type": "Array",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 101,
+              "column": 8
+            },
+            "end": {
+              "line": 104,
+              "column": 9
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "readOnly": true
+            }
+          }
+        },
+        {
+          "name": "_layout",
+          "type": "Array",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 106,
+              "column": 8
+            },
+            "end": {
+              "line": 109,
+              "column": 9
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "readOnly": true
+            }
+          }
+        }
+      ],
+      "methods": [
+        {
+          "name": "selectIndex",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 118,
+              "column": 6
+            },
+            "end": {
+              "line": 122,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "index"
+            }
+          ]
+        },
+        {
+          "name": "_selectedIndexChanged",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 124,
+              "column": 6
+            },
+            "end": {
+              "line": 137,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "val"
+            }
+          ]
+        },
+        {
+          "name": "connectedCallback",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 139,
+              "column": 6
+            },
+            "end": {
+              "line": 147,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "disconnectedCallback",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 149,
+              "column": 6
+            },
+            "end": {
+              "line": 154,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_childNodesChanged",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 156,
+              "column": 6
+            },
+            "end": {
+              "line": 160,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "e"
+            }
+          ]
+        },
+        {
+          "name": "_onIronResize",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 169,
+              "column": 6
+            },
+            "end": {
+              "line": 178,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_computeDimensions",
+          "description": "get the dimensions from the elements",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 181,
+              "column": 6
+            },
+            "end": {
+              "line": 183,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "elements"
+            }
+          ]
+        },
+        {
+          "name": "_computeLayout",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 185,
+              "column": 6
+            },
+            "end": {
+              "line": 195,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "dimensions"
+            },
+            {
+              "name": "height"
+            },
+            {
+              "name": "spacing"
+            }
+          ]
+        },
+        {
+          "name": "_widthChanged",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 197,
+              "column": 6
+            },
+            "end": {
+              "line": 224,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "width"
+            },
+            {
+              "name": "totalWidth"
+            }
+          ]
+        },
+        {
+          "name": "_layoutChanged",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 226,
+              "column": 6
+            },
+            "end": {
+              "line": 261,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "layout"
+            }
+          ]
+        },
+        {
+          "name": "_positionForIndex",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 263,
+              "column": 6
+            },
+            "end": {
+              "line": 272,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_positionChanged",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 274,
+              "column": 6
+            },
+            "end": {
+              "line": 279,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "x"
+            },
+            {
+              "name": "y"
+            }
+          ]
+        }
+      ],
+      "staticMethods": [],
+      "demos": [
+        {
+          "url": "demo/index.html",
+          "description": ""
+        }
+      ],
+      "metadata": {},
+      "sourceRange": {
+        "start": {
+          "line": 46,
+          "column": 4
+        },
+        "end": {
+          "line": 280,
+          "column": 5
+        }
+      },
+      "privacy": "public",
+      "superclass": "HTMLElement",
+      "name": "ImpetusScroller",
+      "attributes": [
+        {
+          "name": "spacing",
+          "description": "spacing (in px) between elements",
+          "sourceRange": {
+            "start": {
+              "line": 58,
+              "column": 8
+            },
+            "end": {
+              "line": 61,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "type": "number"
+        },
+        {
+          "name": "friction",
+          "description": "impetus friction",
+          "sourceRange": {
+            "start": {
+              "line": 64,
+              "column": 8
+            },
+            "end": {
+              "line": 67,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "type": "number"
+        },
+        {
+          "name": "loading",
+          "description": "loading flag for initial render",
+          "sourceRange": {
+            "start": {
+              "line": 70,
+              "column": 8
+            },
+            "end": {
+              "line": 75,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "type": "boolean"
+        },
+        {
+          "name": "x",
+          "description": "current position",
+          "sourceRange": {
+            "start": {
+              "line": 78,
+              "column": 8
+            },
+            "end": {
+              "line": 81,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "type": "number"
+        },
+        {
+          "name": "selected-index",
+          "description": "Index of selected item",
+          "sourceRange": {
+            "start": {
+              "line": 84,
+              "column": 8
+            },
+            "end": {
+              "line": 87,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "type": "number"
+        }
+      ],
+      "events": [
+        {
+          "type": "CustomEvent",
+          "name": "loading-changed",
+          "description": "Fired when the `loading` property changes.",
+          "metadata": {}
+        }
+      ],
+      "styling": {
+        "cssVariables": [],
+        "selectors": []
+      },
+      "slots": [
+        {
+          "description": "",
+          "name": "",
+          "range": {
+            "file": "impetus-scroller.html",
+            "start": {
+              "line": 42,
+              "column": 24
+            },
+            "end": {
+              "line": 42,
+              "column": 50
+            }
+          }
+        }
+      ],
+      "tagname": "impetus-scroller"
+    }
+  ]
+}
